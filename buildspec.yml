@@ -28,11 +28,21 @@ phases:
       - echo Build stage successfully completed on `date`
       - echo Pushing the Docker image...
       - docker push $IMAGE_URI
-      - printf '[{"name":"nginx","imageUri":"%s"}]' "$IMAGE_URI" > images.json
+      - printf '[{"name":"nginx","imageUri":"%s"}]' "$IMAGE_URI" > imageDetail.json
       - echo "$IMAGE_URI" > imageuri
 artifacts:
   files: 
-    - images.json
+    - imageDetail.json
     - imageuri
     - buildspec-test.yml
+    - appspec.yaml
+    - testdef.json
+    secondary-artifacts:
+     DefinitionArtifact:
+      files:
+        - appspec.yaml
+        - taskdef.json
+     ImageArtifact:
+      files:
+        - imageDetail.json
 
