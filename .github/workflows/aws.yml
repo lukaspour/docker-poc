@@ -68,7 +68,7 @@ jobs:
       uses: aws-actions/amazon-ecs-render-task-definition@v1
       with:
         task-definition: taskdef.json
-        container-name: fargate-app
+        container-name: nginx
         image: $ECR_REGISTRY/$ECR_REPOSITORY:test
     - name: set variable
       env:
@@ -159,14 +159,14 @@ jobs:
       uses: aws-actions/amazon-ecs-render-task-definition@v1
       with:
         task-definition: taskdef.json
-        container-name: fargate-app
+        container-name: nginx
         image: $ECR_REGISTRY/$ECR_REPOSITORY:test
 
     - name: Deploy Amazon ECS task definition
       uses: aws-actions/amazon-ecs-deploy-task-definition@v1
       with:
         task-definition: ${{ steps.task-def.outputs.task-definition }}
-        service: sample-fargate
+        service: docker-poc2
         cluster: default
         wait-for-service-stability: false
       
