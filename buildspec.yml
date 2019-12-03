@@ -36,8 +36,8 @@ artifacts:
     - imageuri
     - buildspec-test.yml
     - appspec.yaml
-    - testdef.json
-    secondary-artifacts:
+    - taskdef.json
+   secondary-artifacts:
      DefinitionArtifact:
       files:
         - appspec.yaml
