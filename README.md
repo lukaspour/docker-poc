@@ -5,3 +5,5 @@ https://docs.google.com/spreadsheets/d/1yJSDuV91u5gaj-Mx-UUbq1ScW1JYjVZctWagqx-s
 
 paralelizace na urovni github actions https://github.blog/2019-08-08-github-actions-now-supports-ci-cd/
 
+https://aws.amazon.com/blogs/opensource/github-actions-aws-fargate/
+
