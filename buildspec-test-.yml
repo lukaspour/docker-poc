@@ -1,0 +1,26 @@
+# This requires the following environment variables be set on the Project:
+# AWS_DEFAULT_REGION (Supplied by CodeBuild)
+# AWS_ACCOUNT_ID
+# IMAGE_REPO_NAME
+# IMAGE_TAG
+
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      docker: 18
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+      - $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
+      - CODEBUILD_RESOLVED_SOURCE_VERSION="${CODEBUILD_RESOLVED_SOURCE_VERSION:-$IMAGE_TAG}"
+  build:
+    commands:
+      - echo get image from repository `date`
+      - IMAGEURI=$(cat imageuri)
+      - docker run -d $IMAGEURI
+  post_build:
+    commands:
+      - echo Build stage successfully completed on `date`
+      - docker ps
