@@ -63,8 +63,6 @@ jobs:
         # be deployed to ECS.
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:test .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:test
-    - name: debug
-      run: ls
     - name: Fill in the new image ID in the Amazon ECS task definition
       id: task-def
       uses: aws-actions/amazon-ecs-render-task-definition@v1
@@ -72,7 +70,16 @@ jobs:
         task-definition: task-def.json
         container-name: fargate-app
         image: $ECR_REGISTRY/$ECR_REPOSITORY:test
-       
+    - name: set variable
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        ECR_REPOSITORY: ga-aws-fargate-test
+      run: echo "test" > imageuri
+    - uses: actions/upload-artifact@v1
+      with:
+        name: imageuri
+        path: imageuri      
+
   test:
     name: test
     needs: [build]
@@ -87,18 +94,21 @@ jobs:
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
-      - name: run image
+      - uses: actions/download-artifact@v1
+        with:
+          name: imageuri
+      - name: pull image
         id: pull-image
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: ga-aws-fargate-test
-        run: docker pull $ECR_REGISTRY/$ECR_REPOSITORY:test
+        run: docker pull $ECR_REGISTRY/$ECR_REPOSITORY:$(cat imageuri/imageuri)
       - name: docker run
         id: run-image
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: ga-aws-fargate-test
-        run: docker run -d $ECR_REGISTRY/$ECR_REPOSITORY:test
+        run: docker run -d $ECR_REGISTRY/$ECR_REPOSITORY:$(cat imageuri/imageuri)
 
   test2:
     name: test2
