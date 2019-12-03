@@ -73,7 +73,7 @@ jobs:
     - name: set variable
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        ECR_REPOSITORY: ga-aws-fargate-test
+        ECR_REPOSITORY: docker-poc
       run: echo "test" > imageuri
     - uses: actions/upload-artifact@v1
       with:
@@ -101,13 +101,13 @@ jobs:
         id: pull-image
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: ga-aws-fargate-test
+          ECR_REPOSITORY: docker-poc
         run: docker pull $ECR_REGISTRY/$ECR_REPOSITORY:$(cat imageuri/imageuri)
       - name: docker run
         id: run-image
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: ga-aws-fargate-test
+          ECR_REPOSITORY: docker-poc
         run: docker run -d $ECR_REGISTRY/$ECR_REPOSITORY:$(cat imageuri/imageuri)
 
   test2:
@@ -128,13 +128,13 @@ jobs:
         id: pull-image
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: ga-aws-fargate-test
+          ECR_REPOSITORY: docker-poc
         run: docker pull $ECR_REGISTRY/$ECR_REPOSITORY:test
       - name: docker run
         id: run-image
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: ga-aws-fargate-test
+          ECR_REPOSITORY: docker-poc
         run: docker run -d $ECR_REGISTRY/$ECR_REPOSITORY:test
   
   deploy:
