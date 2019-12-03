@@ -67,7 +67,7 @@ jobs:
       id: task-def
       uses: aws-actions/amazon-ecs-render-task-definition@v1
       with:
-        task-definition: task-def.json
+        task-definition: taskdef.json
         container-name: fargate-app
         image: $ECR_REGISTRY/$ECR_REPOSITORY:test
     - name: set variable
@@ -158,7 +158,7 @@ jobs:
       id: task-def
       uses: aws-actions/amazon-ecs-render-task-definition@v1
       with:
-        task-definition: task-def.json
+        task-definition: taskdef.json
         container-name: fargate-app
         image: $ECR_REGISTRY/$ECR_REPOSITORY:test
 
